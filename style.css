@@ -474,21 +474,3 @@ h1 {
     100% { transform: scale(1); }
 }
 
-/* Animación Lottie */
-#lottie-animation {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    width: 150px;
-    height: 150px;
-    z-index: 1000;
-    pointer-events: none;
-}
-
-/* Responsive para móviles */
-@media (max-width: 768px) {
-    #lottie-animation {
-        width: 100px;
-        height: 100px;
-    }
-}

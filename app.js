@@ -415,15 +415,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Animación Lottie (ejecutar cuando el DOM esté listo)
-document.addEventListener('DOMContentLoaded', function() {
-    if (document.getElementById('lottie-animation')) {
-        lottie.loadAnimation({
-            container: document.getElementById('lottie-animation'),
-            renderer: 'svg',
-            loop: true,
-            autoplay: true,
-            path: 'assets/lottie/Robot-Bot-3D.json'
-        });
-    }
-});
+
