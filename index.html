@@ -1,69 +1,69 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <title>Juego Número Secreto Mejorado</title>
+    <title>Improved Secret Number Game</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <main class="container">
-        <section class="container__contenido">
-            <div class="container__informaciones">
+        <section class="container__content">
+            <div class="container__info">
                 <header class="game-header">
-                    <h1>🎯 Número Secreto</h1>
+                    <h1>🎯 Secret Number</h1>
                 </header>
 
                 <div class="difficulty-selector">
-                    <button class="difficulty-btn active" onclick="cambiarDificultad('facil')" data-difficulty="facil">
-                        Fácil (1-10)
+                    <button class="difficulty-btn active" onclick="changeDifficulty('easy')" data-difficulty="easy">
+                        Easy (1-10)
                     </button>
-                    <button class="difficulty-btn" onclick="cambiarDificultad('medio')" data-difficulty="medio">
-                        Medio (1-50)
+                    <button class="difficulty-btn" onclick="changeDifficulty('medium')" data-difficulty="medium">
+                        Medium (1-50)
                     </button>
-                    <button class="difficulty-btn" onclick="cambiarDificultad('dificil')" data-difficulty="dificil">
-                        Difícil (1-100)
+                    <button class="difficulty-btn" onclick="changeDifficulty('hard')" data-difficulty="hard">
+                        Hard (1-100)
                     </button>
                 </div>
 
                 <div class="mode-selector">
-                    <h3 style="text-align: center; margin-bottom: 1rem; color: #1875E8;">Modalidad de Juego</h3>
+                    <h3 style="text-align: center; margin-bottom: 1rem; color: #1875E8;">Game Mode</h3>
                     <div class="mode-buttons">
-                        <button class="mode-btn active" onclick="cambiarModalidad('clasico')" data-mode="clasico">
-                            🎯 Clásico<br><small>Sin límite</small>
+                        <button class="mode-btn active" onclick="changeMode('classic')" data-mode="classic">
+                            🎯 Classic<br><small>No limit</small>
                         </button>
-                        <button class="mode-btn" onclick="cambiarModalidad('desafio')" data-mode="desafio">
-                            ⚡ Desafío<br><small>Intentos limitados</small>
+                        <button class="mode-btn" onclick="changeMode('challenge')" data-mode="challenge">
+                            ⚡ Challenge<br><small>Limited attempts</small>
                         </button>
-                        <button class="mode-btn" onclick="cambiarModalidad('experto')" data-mode="experto">
-                            🔥 Experto<br><small>Muy pocos intentos</small>
+                        <button class="mode-btn" onclick="changeMode('expert')" data-mode="expert">
+                            🔥 Expert<br><small>Very few attempts</small>
                         </button>
                     </div>
                 </div>
 
                 <div class="stats">
                     <div class="stat">
-                        <span class="stat-value" id="intentos-display">0</span>
-                        <span class="stat-label">Intentos</span>
+                        <span class="stat-value" id="attempts-display">0</span>
+                        <span class="stat-label">Attempts</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-value" id="intentos-restantes">∞</span>
-                        <span class="stat-label">Restantes</span>
+                        <span class="stat-value" id="attempts-remaining">∞</span>
+                        <span class="stat-label">Remaining</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-value" id="puntaje-display">0</span>
-                        <span class="stat-label">Puntaje</span>
+                        <span class="stat-value" id="score-display">0</span>
+                        <span class="stat-label">Score</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-value" id="mejor-puntaje">0</span>
-                        <span class="stat-label">Mejor</span>
+                        <span class="stat-value" id="high-score">0</span>
+                        <span class="stat-label">Best</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-value" id="partidas-ganadas">0</span>
-                        <span class="stat-label">Ganadas</span>
+                        <span class="stat-value" id="games-won">0</span>
+                        <span class="stat-label">Won</span>
                     </div>
                 </div>
 
@@ -71,22 +71,22 @@
                     <div class="progress-fill" id="progress-fill"></div>
                 </div>
 
-                <div class="container__texto">
-                    <p class="texto__parrafo" id="instrucciones"></p>
+                <div class="container__text">
+                    <p class="text__paragraph" id="instructions"></p>
                 </div>
 
-                <div class="mensaje info" id="mensaje">
-                    ¡Adivina el número secreto!
+                <div class="message info" id="message">
+                    Guess the secret number!
                 </div>
 
-                <form class="juego-form" onsubmit="return manejarSubmit(event)">
-                    <label for="valorUsuario" class="sr-only">
-                        Ingresa tu número
+                <form class="game-form" onsubmit="return handleSubmit(event)">
+                    <label for="userValue" class="sr-only">
+                        Enter your number
                     </label>
                     <input type="number" 
-                           id="valorUsuario" 
+                           id="userValue" 
                            class="container__input"
-                           placeholder="¿Cuál es el número?"
+                           placeholder="What's the number?"
                            min="1"
                            max="10"
                            required
@@ -94,16 +94,16 @@
 
                     <div class="hint" id="hint-container" style="display: none;"></div>
 
-                    <div class="container__botones">
-                        <button type="submit" class="container__boton" id="btn-intentar">
-                            🎲 Intentar
+                    <div class="container__buttons">
+                        <button type="submit" class="container__button" id="btn-guess">
+                            🎲 Guess
                         </button>
                         <button type="button" 
-                                onclick="reiniciarJuego();" 
-                                class="container__boton" 
-                                id="reiniciar" 
+                                onclick="restartGame();" 
+                                class="container__button" 
+                                id="restart" 
                                 disabled>
-                            🔄 Nuevo Juego
+                            🔄 New Game
                         </button>
                     </div>
                 </form>
