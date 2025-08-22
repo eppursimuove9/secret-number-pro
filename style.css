@@ -489,3 +489,8 @@ h1 {
     width: 100%;
     max-width: 600px;           /* Max width */
 }
+
+h1 {
+    white-space: nowrap;     /* Prevents text from wrapping */
+    text-align: center;      /* Keeps it centered */
+}
