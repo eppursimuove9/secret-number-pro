@@ -473,3 +473,19 @@ h1 {
     50% { transform: scale(1.02); }
     100% { transform: scale(1); }
 }
+
+/* Main container */
+.container__content {
+    display: flex;              /* Enable Flexbox */
+    justify-content: center;    /* Center horizontally */
+    align-items: center;        /* Center vertically */
+    min-height: 100vh;          /* Full screen height */
+    padding: 1rem;              /* Inner spacing for mobile */
+    box-sizing: border-box;     /* Include padding in width calculation */
+}
+
+/* Game box */
+.container__info {
+    width: 100%;
+    max-width: 600px;           /* Max width */
+}
