@@ -494,3 +494,31 @@ h1 {
     white-space: nowrap;     /* Prevents text from wrapping */
     text-align: center;      /* Keeps it centered */
 }
+
+.stats {
+    display: flex;
+    justify-content: center;   /* Center all stats horizontally */
+    gap: 2rem;                 /* Space between each stat */
+    margin: 1.5rem 0;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;    /* Stack value above label */
+    align-items: center;       /* Center horizontally */
+    justify-content: center;   /* Center vertically */
+    text-align: center;
+    min-width: 60px;           /* Keeps all boxes with a consistent width */
+}
+
+.stat-value {
+    font-size: 1.5rem;         /* Bigger number */
+    font-weight: bold;
+    line-height: 1;            /* Prevents extra vertical spacing */
+}
+
+.stat-label {
+    font-size: 0.85rem;        /* Smaller label */
+    text-transform: uppercase; /* Matches your design style */
+    margin-top: 0.25rem;       /* Small space between number and label */
+}
