@@ -217,7 +217,7 @@ function updateUI() {
     const maxAttempts = modeConfig.attempts[game.difficulty];
 
     document.getElementById('instructions').textContent =
-        `Guess the number between ${config.min} and ${config.max} - Mode: ${modeConfig.name}`;
+        `Guess the number between ${config.min} and ${config.max} / Mode: ${modeConfig.name}`;
 
     document.getElementById('attempts-display').textContent = game.attempts;
     document.getElementById('score-display').textContent = game.score;
