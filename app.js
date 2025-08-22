@@ -1,18 +1,3 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // 1. ✅ Código nuevo al principio (también funciona)
-    lottie.loadAnimation({
-        container: document.getElementById('lottie-container'),
-        renderer: 'svg',
-        loop: true,
-        autoplay: true,
-        path: 'Robot-Bot-3D.json'
-    });
-
-    // 2. Todo tu código ORIGINAL después...
-    updateUI();
-    showMessage('🎯 Guess the secret number!', 'info');
-    // ... resto del código
-});
 // Game Configuration
 const DIFFICULTIES = {
     easy: { min: 1, max: 10, name: 'Easy' },
