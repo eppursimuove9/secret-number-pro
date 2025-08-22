@@ -473,3 +473,38 @@ h1 {
     50% { transform: scale(1.02); }
     100% { transform: scale(1); }
 }
+
+/* AJUSTES AL CONTENEDOR PRINCIPAL */
+.container__content {
+    display: flex;          /* Activa Flexbox */
+    align-items: center;    /* Centra verticalmente */
+    justify-content: center;/* Centra horizontalmente */
+    gap: 2rem;              /* Espacio entre las dos columnas */
+    width: 100%;
+    padding: 2rem;          /* Añade un poco de espacio interior */
+}
+
+/* ESTILOS PARA LAS NUEVAS COLUMNAS */
+.container__info {
+    flex: 1;                /* La columna del juego ocupa el espacio disponible */
+    max-width: 600px;       /* Mantenemos el ancho máximo que ya tenías */
+}
+
+.container__animation {
+    flex: 1;                /* La columna de la animación ocupa el espacio disponible */
+    max-width: 500px;       /* Ajusta este valor al tamaño que prefieras */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* AJUSTE PARA MÓVILES (OPCIONAL PERO RECOMENDADO) */
+@media (max-width: 900px) {
+    .container__content {
+        flex-direction: column; /* Pone la animación debajo en pantallas pequeñas */
+    }
+    .container__animation {
+        max-width: 300px;
+        margin-top: 2rem;
+    }
+}
