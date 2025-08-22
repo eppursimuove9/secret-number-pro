@@ -1,257 +1,257 @@
-// Configuración del juego
-const DIFICULTADES = {
-    facil: { min: 1, max: 10, nombre: 'Fácil' },
-    medio: { min: 1, max: 50, nombre: 'Medio' },
-    dificil: { min: 1, max: 100, nombre: 'Difícil' }
+// Game Configuration
+const DIFFICULTIES = {
+    easy: { min: 1, max: 10, name: 'Easy' },
+    medium: { min: 1, max: 50, name: 'Medium' },
+    hard: { min: 1, max: 100, name: 'Hard' }
 };
 
-const MODALIDADES = {
-    clasico: {
-        nombre: 'Clásico',
-        descripcion: 'Intentos ilimitados',
-        intentos: {
-            facil: Infinity,
-            medio: Infinity,
-            dificil: Infinity
+const MODES = {
+    classic: {
+        name: 'Classic',
+        description: 'Unlimited attempts',
+        attempts: {
+            easy: Infinity,
+            medium: Infinity,
+            hard: Infinity
         }
     },
-    desafio: {
-        nombre: 'Desafío',
-        descripcion: 'Intentos limitados',
-        intentos: {
-            facil: 5,
-            medio: 7,
-            dificil: 10
+    challenge: {
+        name: 'Challenge',
+        description: 'Limited attempts',
+        attempts: {
+            easy: 5,
+            medium: 7,
+            hard: 10
         }
     },
-    experto: {
-        nombre: 'Experto',
-        descripcion: 'Muy pocos intentos',
-        intentos: {
-            facil: 3,
-            medio: 5,
-            dificil: 7
+    expert: {
+        name: 'Expert',
+        description: 'Very few attempts',
+        attempts: {
+            easy: 3,
+            medium: 5,
+            hard: 7
         }
     }
 };
 
-// Estado del juego
-class JuegoNumeroSecreto {
+// Game State
+class SecretNumberGame {
     constructor() {
-        this.dificultad = 'facil';
-        this.modalidad = 'clasico';
-        this.numeroMaximo = DIFICULTADES[this.dificultad].max;
-        this.numeroMinimo = DIFICULTADES[this.dificultad].min;
-        this.intentosMaximos = MODALIDADES[this.modalidad].intentos[this.dificultad];
+        this.difficulty = 'easy';
+        this.mode = 'classic';
+        this.maxNumber = DIFFICULTIES[this.difficulty].max;
+        this.minNumber = DIFFICULTIES[this.difficulty].min;
+        this.maxAttempts = MODES[this.mode].attempts[this.difficulty];
         this.reset();
-        this.cargarEstadisticas();
+        this.loadStats();
     }
 
     reset() {
-        this.listaNumerosSorteados = [];
-        this.intentos = 0;
-        this.intentosMaximos = MODALIDADES[this.modalidad].intentos[this.dificultad];
-        this.numeroSecreto = this.generarNumeroSecreto();
-        this.juegoTerminado = false;
-        this.juegoGanado = false;
-        this.puntaje = 0;
-        this.actualizarProgreso();
+        this.drawnNumbersList = [];
+        this.attempts = 0;
+        this.maxAttempts = MODES[this.mode].attempts[this.difficulty];
+        this.secretNumber = this.generateSecretNumber();
+        this.gameOver = false;
+        this.gameWon = false;
+        this.score = 0;
+        this.updateProgress();
     }
 
-    generarNumeroSecreto() {
-        // Si ya se sortearon todos los números posibles
-        if (this.listaNumerosSorteados.length >= this.numeroMaximo) {
-            return null; // Indicar que no hay más números disponibles
+    generateSecretNumber() {
+        // If all possible numbers have been drawn
+        if (this.drawnNumbersList.length >= this.maxNumber) {
+            return null; // Indicate no more numbers are available
         }
 
-        let numeroGenerado;
+        let generatedNumber;
         do {
-            numeroGenerado = Math.floor(Math.random() * this.numeroMaximo) + this.numeroMinimo;
-        } while (this.listaNumerosSorteados.includes(numeroGenerado));
+            generatedNumber = Math.floor(Math.random() * this.maxNumber) + this.minNumber;
+        } while (this.drawnNumbersList.includes(generatedNumber));
 
-        this.listaNumerosSorteados.push(numeroGenerado);
-        return numeroGenerado;
+        this.drawnNumbersList.push(generatedNumber);
+        return generatedNumber;
     }
 
-    verificarIntento(numeroUsuario) {
-        if (this.juegoTerminado) return;
+    checkGuess(userNumber) {
+        if (this.gameOver) return;
 
-        this.intentos++;
-        const intentosRestantes = this.intentosMaximos - this.intentos;
-        
-        if (numeroUsuario === this.numeroSecreto) {
-            this.juegoTerminado = true;
-            this.juegoGanado = true;
-            this.puntaje = this.calcularPuntaje();
-            this.actualizarEstadisticas();
+        this.attempts++;
+        const remainingAttempts = this.maxAttempts - this.attempts;
+
+        if (userNumber === this.secretNumber) {
+            this.gameOver = true;
+            this.gameWon = true;
+            this.score = this.calculateScore();
+            this.updateStatsWin();
             return {
-                resultado: 'acierto',
-                mensaje: `🎉 ¡Excelente! Acertaste en ${this.intentos} ${this.intentos === 1 ? 'intento' : 'intentos'}`,
-                puntaje: this.puntaje,
-                intentosRestantes: intentosRestantes
+                result: 'correct',
+                message: `🎉 Excellent! You guessed it in ${this.attempts} ${this.attempts === 1 ? 'attempt' : 'attempts'}`,
+                score: this.score,
+                remainingAttempts: remainingAttempts
             };
-        } else if (intentosRestantes <= 0 && this.intentosMaximos !== Infinity) {
-            // Se acabaron los intentos
-            this.juegoTerminado = true;
-            this.juegoGanado = false;
-            this.actualizarEstadisticasDerrota();
+        } else if (remainingAttempts <= 0 && this.maxAttempts !== Infinity) {
+            // Out of attempts
+            this.gameOver = true;
+            this.gameWon = false;
+            this.updateStatsLoss();
             return {
-                resultado: 'derrota',
-                mensaje: `💀 ¡Se acabaron los intentos! El número era ${this.numeroSecreto}`,
-                numeroSecreto: this.numeroSecreto,
-                intentosRestantes: 0
+                result: 'loss',
+                message: `💀 You're out of attempts! The number was ${this.secretNumber}`,
+                secretNumber: this.secretNumber,
+                remainingAttempts: 0
             };
-        } else if (numeroUsuario > this.numeroSecreto) {
+        } else if (userNumber > this.secretNumber) {
             return {
-                resultado: 'mayor',
-                mensaje: `📉 El número secreto es menor ${intentosRestantes === Infinity ? '' : `(${intentosRestantes} intentos restantes)`}`,
-                hint: this.generarHint(numeroUsuario),
-                intentosRestantes: intentosRestantes
+                result: 'higher',
+                message: `📉 The secret number is lower ${remainingAttempts === Infinity ? '' : `(${remainingAttempts} attempts left)`}`,
+                hint: this.generateHint(userNumber),
+                remainingAttempts: remainingAttempts
             };
         } else {
             return {
-                resultado: 'menor',
-                mensaje: `📈 El número secreto es mayor ${intentosRestantes === Infinity ? '' : `(${intentosRestantes} intentos restantes)`}`,
-                hint: this.generarHint(numeroUsuario),
-                intentosRestantes: intentosRestantes
+                result: 'lower',
+                message: `📈 The secret number is higher ${remainingAttempts === Infinity ? '' : `(${remainingAttempts} attempts left)`}`,
+                hint: this.generateHint(userNumber),
+                remainingAttempts: remainingAttempts
             };
         }
     }
 
-    generarHint(numeroUsuario) {
-        const diferencia = Math.abs(numeroUsuario - this.numeroSecreto);
-        const rango = this.numeroMaximo - this.numeroMinimo + 1;
-        
-        if (diferencia <= rango * 0.1) {
-            return "🔥 ¡Muy caliente! Estás súper cerca";
-        } else if (diferencia <= rango * 0.2) {
-            return "♨️ Caliente, te estás acercando";
-        } else if (diferencia <= rango * 0.4) {
-            return "🌡️ Tibio, sigue intentando";
+    generateHint(userNumber) {
+        const difference = Math.abs(userNumber - this.secretNumber);
+        const range = this.maxNumber - this.minNumber + 1;
+
+        if (difference <= range * 0.1) {
+            return "🔥 Very hot! You are super close";
+        } else if (difference <= range * 0.2) {
+            return "♨️ Hot, you're getting closer";
+        } else if (difference <= range * 0.4) {
+            return "🌡️ Warm, keep trying";
         } else {
-            return "❄️ Frío, estás lejos";
+            return "❄️ Cold, you are far away";
         }
     }
 
-    calcularPuntaje() {
-        const puntajeBase = 1000;
-        const bonusDificultad = {
-            facil: 1,
-            medio: 2,
-            dificil: 3
+    calculateScore() {
+        const baseScore = 1000;
+        const difficultyBonus = {
+            easy: 1,
+            medium: 2,
+            hard: 3
         };
 
-        const bonusModalidad = {
-            clasico: 1,
-            desafio: 1.5,
-            experto: 2
+        const modeBonus = {
+            classic: 1,
+            challenge: 1.5,
+            expert: 2
         };
-        
-        const penalizacionIntentos = Math.max(0, (this.intentos - 1) * 50);
-        const puntajeFinal = Math.max(
-            (puntajeBase - penalizacionIntentos) * bonusDificultad[this.dificultad] * bonusModalidad[this.modalidad],
+
+        const attemptPenalty = Math.max(0, (this.attempts - 1) * 50);
+        const finalScore = Math.max(
+            (baseScore - attemptPenalty) * difficultyBonus[this.difficulty] * modeBonus[this.mode],
             100
         );
-        
-        return Math.round(puntajeFinal);
+
+        return Math.round(finalScore);
     }
 
-    actualizarProgreso() {
-        const progreso = (this.listaNumerosSorteados.length / this.numeroMaximo) * 100;
-        document.getElementById('progress-fill').style.width = `${progreso}%`;
+    updateProgress() {
+        const progress = (this.drawnNumbersList.length / this.maxNumber) * 100;
+        document.getElementById('progress-fill').style.width = `${progress}%`;
     }
 
-    cambiarDificultad(nuevaDificultad) {
-        this.dificultad = nuevaDificultad;
-        this.numeroMaximo = DIFICULTADES[nuevaDificultad].max;
-        this.numeroMinimo = DIFICULTADES[nuevaDificultad].min;
-        
-        // Actualizar el input
-        const input = document.getElementById('valorUsuario');
-        input.min = this.numeroMinimo;
-        input.max = this.numeroMaximo;
-        
+    changeDifficulty(newDifficulty) {
+        this.difficulty = newDifficulty;
+        this.maxNumber = DIFFICULTIES[newDifficulty].max;
+        this.minNumber = DIFFICULTIES[newDifficulty].min;
+
+        // Update the input
+        const input = document.getElementById('userValue');
+        input.min = this.minNumber;
+        input.max = this.maxNumber;
+
         this.reset();
     }
 
-    cambiarModalidad(nuevaModalidad) {
-        this.modalidad = nuevaModalidad;
+    changeMode(newMode) {
+        this.mode = newMode;
         this.reset();
     }
 
-    cargarEstadisticas() {
-        const stats = JSON.parse(localStorage.getItem('juegoStats') || '{}');
-        this.estadisticas = {
-            mejorPuntaje: stats.mejorPuntaje || 0,
-            partidasGanadas: stats.partidasGanadas || 0,
-            totalPartidas: stats.totalPartidas || 0,
-            partidasPerdidas: stats.partidasPerdidas || 0
+    loadStats() {
+        const stats = JSON.parse(localStorage.getItem('gameStats') || '{}');
+        this.stats = {
+            highScore: stats.highScore || 0,
+            gamesWon: stats.gamesWon || 0,
+            totalGames: stats.totalGames || 0,
+            gamesLost: stats.gamesLost || 0
         };
     }
 
-    actualizarEstadisticas() {
-        this.estadisticas.partidasGanadas++;
-        this.estadisticas.totalPartidas++;
-        
-        if (this.puntaje > this.estadisticas.mejorPuntaje) {
-            this.estadisticas.mejorPuntaje = this.puntaje;
+    updateStatsWin() {
+        this.stats.gamesWon++;
+        this.stats.totalGames++;
+
+        if (this.score > this.stats.highScore) {
+            this.stats.highScore = this.score;
         }
 
-        localStorage.setItem('juegoStats', JSON.stringify(this.estadisticas));
+        localStorage.setItem('gameStats', JSON.stringify(this.stats));
     }
 
-    actualizarEstadisticasDerrota() {
-        this.estadisticas.partidasPerdidas++;
-        this.estadisticas.totalPartidas++;
-        localStorage.setItem('juegoStats', JSON.stringify(this.estadisticas));
+    updateStatsLoss() {
+        this.stats.gamesLost++;
+        this.stats.totalGames++;
+        localStorage.setItem('gameStats', JSON.stringify(this.stats));
     }
 }
 
-// Instancia del juego
-const juego = new JuegoNumeroSecreto();
+// Game instance
+const game = new SecretNumberGame();
 
-// Funciones de UI
-function actualizarUI() {
-    const config = DIFICULTADES[juego.dificultad];
-    const modoConfig = MODALIDADES[juego.modalidad];
-    const intentosMax = modoConfig.intentos[juego.dificultad];
-    
-    document.getElementById('instrucciones').textContent = 
-        `Adivina el número entre ${config.min} y ${config.max} - Modo: ${modoConfig.nombre}`;
-    
-    document.getElementById('intentos-display').textContent = juego.intentos;
-    document.getElementById('puntaje-display').textContent = juego.puntaje;
-    document.getElementById('mejor-puntaje').textContent = juego.estadisticas.mejorPuntaje;
-    document.getElementById('partidas-ganadas').textContent = juego.estadisticas.partidasGanadas;
-    
-    // Actualizar intentos restantes
-    const intentosRestantes = intentosMax === Infinity ? '∞' : (intentosMax - juego.intentos);
-    document.getElementById('intentos-restantes').textContent = intentosRestantes;
-    
-    // Cambiar color si quedan pocos intentos
-    const intentosRestantesEl = document.getElementById('intentos-restantes');
-    const statEl = intentosRestantesEl.parentElement;
-    
+// UI Functions
+function updateUI() {
+    const config = DIFFICULTIES[game.difficulty];
+    const modeConfig = MODES[game.mode];
+    const maxAttempts = modeConfig.attempts[game.difficulty];
+
+    document.getElementById('instructions').textContent =
+        `Guess the number between ${config.min} and ${config.max} - Mode: ${modeConfig.name}`;
+
+    document.getElementById('attempts-display').textContent = game.attempts;
+    document.getElementById('score-display').textContent = game.score;
+    document.getElementById('high-score').textContent = game.stats.highScore;
+    document.getElementById('games-won').textContent = game.stats.gamesWon;
+
+    // Update remaining attempts
+    const remainingAttempts = maxAttempts === Infinity ? '∞' : (maxAttempts - game.attempts);
+    document.getElementById('attempts-remaining').textContent = remainingAttempts;
+
+    // Change color if few attempts are left
+    const remainingAttemptsEl = document.getElementById('attempts-remaining');
+    const statEl = remainingAttemptsEl.parentElement;
+
     statEl.className = 'stat';
-    if (intentosMax !== Infinity) {
-        const restantes = intentosMax - juego.intentos;
-        if (restantes <= 1) {
-            statEl.classList.add('intentos-danger');
-        } else if (restantes <= 2) {
-            statEl.classList.add('intentos-warning');
+    if (maxAttempts !== Infinity) {
+        const remaining = maxAttempts - game.attempts;
+        if (remaining <= 1) {
+            statEl.classList.add('attempts-danger');
+        } else if (remaining <= 2) {
+            statEl.classList.add('attempts-warning');
         }
     }
 }
 
-function mostrarMensaje(texto, tipo = 'info', mostrarHint = null) {
-    const mensajeEl = document.getElementById('mensaje');
+function showMessage(text, type = 'info', showHint = null) {
+    const messageEl = document.getElementById('message');
     const hintEl = document.getElementById('hint-container');
-    
-    mensajeEl.textContent = texto;
-    mensajeEl.className = `mensaje ${tipo} bounce-in`;
-    
-    if (mostrarHint) {
-        hintEl.textContent = mostrarHint;
+
+    messageEl.textContent = text;
+    messageEl.className = `message ${type} bounce-in`;
+
+    if (showHint) {
+        hintEl.textContent = showHint;
         hintEl.style.display = 'block';
         hintEl.className = 'hint fade-in';
     } else {
@@ -259,19 +259,19 @@ function mostrarMensaje(texto, tipo = 'info', mostrarHint = null) {
     }
 }
 
-function validarEntrada(valor) {
-    const input = document.getElementById('valorUsuario');
-    
-    if (!valor || isNaN(valor)) {
-        mostrarMensaje('❌ Por favor, ingresa un número válido', 'error');
+function validateInput(value) {
+    const input = document.getElementById('userValue');
+
+    if (!value || isNaN(value)) {
+        showMessage('❌ Please enter a valid number', 'error');
         input.classList.add('error');
         setTimeout(() => input.classList.remove('error'), 500);
         return false;
     }
 
-    if (valor < juego.numeroMinimo || valor > juego.numeroMaximo) {
-        mostrarMensaje(
-            `❌ El número debe estar entre ${juego.numeroMinimo} y ${juego.numeroMaximo}`, 
+    if (value < game.minNumber || value > game.maxNumber) {
+        showMessage(
+            `❌ The number must be between ${game.minNumber} and ${game.maxNumber}`,
             'error'
         );
         input.classList.add('error');
@@ -283,136 +283,134 @@ function validarEntrada(valor) {
     return true;
 }
 
-function verificarIntento() {
-    const input = document.getElementById('valorUsuario');
-    const numeroUsuario = parseInt(input.value);
+function checkGuess() {
+    const input = document.getElementById('userValue');
+    const userNumber = parseInt(input.value);
 
-    if (!validarEntrada(numeroUsuario)) {
+    if (!validateInput(userNumber)) {
         input.focus();
         return;
     }
 
-    if (juego.numeroSecreto === null) {
-        mostrarMensaje('🎊 ¡Has completado todos los números posibles!', 'success');
-        document.getElementById('reiniciar').disabled = false;
+    if (game.secretNumber === null) {
+        showMessage('🎊 You have completed all possible numbers!', 'success');
+        document.getElementById('restart').disabled = false;
         return;
     }
 
-    const resultado = juego.verificarIntento(numeroUsuario);
-    
-    if (resultado.resultado === 'acierto') {
+    const result = game.checkGuess(userNumber);
+
+    if (result.result === 'correct') {
         input.classList.add('success');
-        mostrarMensaje(resultado.mensaje, 'success');
-        document.getElementById('reiniciar').disabled = false;
-        document.getElementById('btn-intentar').disabled = true;
-        
-        // Animación de celebración
+        showMessage(result.message, 'success');
+        document.getElementById('restart').disabled = false;
+        document.getElementById('btn-guess').disabled = true;
+
+        // Celebration animation
         document.querySelector('.container').style.animation = 'pulse 0.6s ease-in-out';
         setTimeout(() => {
             document.querySelector('.container').style.animation = '';
         }, 600);
-        
-    } else if (resultado.resultado === 'derrota') {
+
+    } else if (result.result === 'loss') {
         input.classList.add('error');
-        mostrarMensaje(resultado.mensaje, 'error');
-        document.getElementById('reiniciar').disabled = false;
-        document.getElementById('btn-intentar').disabled = true;
-        
-        // Animación de derrota
+        showMessage(result.message, 'error');
+        document.getElementById('restart').disabled = false;
+        document.getElementById('btn-guess').disabled = true;
+
+        // Loss animation
         document.querySelector('.container').style.animation = 'shake 0.5s ease-in-out';
         setTimeout(() => {
             document.querySelector('.container').style.animation = '';
         }, 500);
-        
+
     } else {
-        mostrarMensaje(resultado.mensaje, 'error', resultado.hint);
+        showMessage(result.message, 'error', result.hint);
         input.classList.add('error');
         setTimeout(() => input.classList.remove('error'), 500);
     }
 
-    juego.actualizarProgreso();
-    actualizarUI();
-    limpiarCaja();
+    game.updateProgress();
+    updateUI();
+    clearInputBox();
 }
 
-function limpiarCaja() {
-    const input = document.getElementById('valorUsuario');
+function clearInputBox() {
+    const input = document.getElementById('userValue');
     input.value = '';
     input.classList.remove('error', 'success');
-    if (!juego.juegoTerminado) {
+    if (!game.gameOver) {
         input.focus();
     }
 }
 
-function reiniciarJuego() {
-    juego.reset();
-    
-    document.getElementById('reiniciar').disabled = true;
-    document.getElementById('btn-intentar').disabled = false;
-    
-    mostrarMensaje('🎯 ¡Nuevo juego iniciado!', 'info');
-    
-    actualizarUI();
-    limpiarCaja();
-    
+function restartGame() {
+    game.reset();
+
+    document.getElementById('restart').disabled = true;
+    document.getElementById('btn-guess').disabled = false;
+
+    showMessage('🎯 New game started!', 'info');
+
+    updateUI();
+    clearInputBox();
+
     document.querySelector('.container').classList.add('fade-in');
     setTimeout(() => {
         document.querySelector('.container').classList.remove('fade-in');
     }, 500);
 }
 
-function cambiarDificultad(dificultad) {
-    // Actualizar botones
+function changeDifficulty(difficulty) {
+    // Update buttons
     document.querySelectorAll('.difficulty-btn').forEach(btn => {
         btn.classList.remove('active');
     });
-    document.querySelector(`[data-difficulty="${dificultad}"]`).classList.add('active');
-    
-    // Cambiar dificultad en el juego
-    juego.cambiarDificultad(dificultad);
-    
-    mostrarMensaje(`🎮 Dificultad: ${DIFICULTADES[dificultad].nombre}`, 'info');
-    actualizarUI();
-    limpiarCaja();
+    document.querySelector(`[data-difficulty="${difficulty}"]`).classList.add('active');
+
+    // Change difficulty in the game
+    game.changeDifficulty(difficulty);
+
+    showMessage(`🎮 Difficulty: ${DIFFICULTIES[difficulty].name}`, 'info');
+    updateUI();
+    clearInputBox();
 }
 
-function cambiarModalidad(modalidad) {
-    // Actualizar botones
+function changeMode(mode) {
+    // Update buttons
     document.querySelectorAll('.mode-btn').forEach(btn => {
         btn.classList.remove('active');
     });
-    document.querySelector(`[data-mode="${modalidad}"]`).classList.add('active');
-    
-    // Cambiar modalidad en el juego
-    juego.cambiarModalidad(modalidad);
-    
-    const modoConfig = MODALIDADES[modalidad];
-    const intentosMax = modoConfig.intentos[juego.dificultad];
-    const intentosTexto = intentosMax === Infinity ? 'sin límite' : `${intentosMax} intentos`;
-    
-    mostrarMensaje(`🎮 Modo: ${modoConfig.nombre} (${intentosTexto})`, 'info');
-    actualizarUI();
-    limpiarCaja();
+    document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
+
+    // Change mode in the game
+    game.changeMode(mode);
+
+    const modeConfig = MODES[mode];
+    const maxAttempts = modeConfig.attempts[game.difficulty];
+    const attemptsText = maxAttempts === Infinity ? 'no limit' : `${maxAttempts} attempts`;
+
+    showMessage(`🎮 Mode: ${modeConfig.name} (${attemptsText})`, 'info');
+    updateUI();
+    clearInputBox();
 }
 
-function manejarSubmit(event) {
+function handleSubmit(event) {
     event.preventDefault();
-    verificarIntento();
+    checkGuess();
     return false;
 }
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', function() {
-    actualizarUI();
-    mostrarMensaje('🎯 ¡Adivina el número secreto!', 'info');
-    document.getElementById('valorUsuario').focus();
+    updateUI();
+    showMessage('🎯 Guess the secret number!', 'info');
+    document.getElementById('userValue').focus();
 
-    // Permitir Enter para jugar
-    document.getElementById('valorUsuario').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter' && !juego.juegoTerminado) {
-            verificarIntento();
+    // Allow Enter to play
+    document.getElementById('userValue').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !game.gameOver) {
+            checkGuess();
         }
     });
 });
-
-
