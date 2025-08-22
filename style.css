@@ -494,3 +494,9 @@ h1 {
     white-space: nowrap;     /* Prevents text from wrapping */
     text-align: center;      /* Keeps it centered */
 }
+
+.container__info {
+    width: 100%;
+    max-width: none;        /* Remove the limit that causes wrapping */
+    text-align: center;     /* Keep it centered */
+}
