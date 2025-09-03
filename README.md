@@ -45,11 +45,10 @@ An interactive game made with **HTML, CSS, and JavaScript**, where the goal is t
 ## 📂 Project Structure
 
 ```secret-number-pro/
-│
+├── README.md        # Instructions and game description
+├── app.js           # Game logic and events
 ├── index.html       # Main game structure
 ├── style.css        # Visual styles
-├── app.js           # Game logic and events
-└── README.md        # Instructions and game description
 ```
 
 ---
