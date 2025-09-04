@@ -1,10 +1,10 @@
 # 🎯 Secret Number Pro
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://your-project-name.vercel.app)
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://secret-number-pro.vercel.app/)
 
 An interactive game built with **HTML, CSS, and JavaScript**, where the goal is to guess a randomly generated secret number. The project features a modern UI, multiple difficulty levels, and different game modes to challenge your skills.
 
-**[➡️ Try the Live Demo](https://your-project-name.vercel.app)**
+**[➡️ Try the Live Demo](https://secret-number-pro.vercel.app/)**
 
 ---
 
