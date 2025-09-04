@@ -72,13 +72,14 @@ The following diagram illustrates how the DOM elements, event handlers, and game
 
 ```
 secret-number-pro/
+
+├── assets/            # Folder for images and other resources
+    ├── System-Architecture-Diagram.png
+    └── Component-Interaction-Diagram.png
 ├── README.md          # Project documentation
 ├── index.html         # Main structure (HTML)
 ├── style.css          # Visual styles (CSS)
 ├── app.js             # Game logic (JavaScript)
-└── assets/            # Folder for images and other resources
-    ├── System-Architecture-Diagram.png
-    └── Component-Interaction-Diagram.png
 ```
 
 ---
