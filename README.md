@@ -41,7 +41,7 @@ An interactive game built with **HTML, CSS, and JavaScript**, where the goal is 
 
 Secret Number Pro follows a three-layer client-side architecture with a clear separation of concerns and a "presentation-first" design philosophy, where the visual experience is a priority.
 
-![System Architecture Diagram](./assets/System-Architecture-Diagram.png)
+![System Architecture Diagram](./assets/system-architecture-diagram.png)
 
 ---
 
@@ -49,7 +49,7 @@ Secret Number Pro follows a three-layer client-side architecture with a clear se
 
 The following diagram illustrates how the DOM elements, event handlers, and game engine functions interact to bring the application to life.
 
-![Component Interaction Diagram](./assets/Component-Interaction-Diagram.png)
+![Component Interaction Diagram](./assets/component-interaction-diagram.png)
 
 ---
 
