@@ -522,3 +522,7 @@ h1 {
     text-transform: uppercase; /* Matches your design style */
     margin-top: 0.25rem;       /* Small space between number and label */
 }
+
+h1 {
+  white-space: nowrap;
+}
