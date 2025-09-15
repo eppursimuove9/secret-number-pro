@@ -524,5 +524,14 @@ h1 {
 }
 
 h1 {
-  white-space: nowrap;
+  /* El tamaño de la fuente será el 8% del ancho de la pantalla */
+  font-size: 8vw;
+  white-space: nowrap; /* Mantiene una sola línea en escritorio */
+}
+
+@media (min-width: 768px) {
+  h1 {
+    /* Fija un tamaño máximo para pantallas grandes para que no sea gigante */
+    font-size: 3rem; 
+  }
 }
